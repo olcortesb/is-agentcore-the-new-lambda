@@ -210,3 +210,9 @@ __marimo__/
 .bedrock_agentcore.yaml
 .bedrock_agentcore/
 .dockerignore
+
+# Environment files with sensitive data
+.env
+
+# IAM policy files with account-specific data
+sqs-policy.json

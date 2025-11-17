@@ -32,7 +32,7 @@ This folder contains a basic implementation of AgentCore with Titan model. I dep
 - Integration with Amazon Titan model
 - Deployment testing
 
-The deploy was ok and I can run the Agentcore with Amazon Titan Model
+The deploy was ok and I can run the Agentcore with Amazon Titan Model ✅
 
 ![alt text](images/image.png)
 
@@ -47,10 +47,35 @@ This experiment tests AgentCore as a pure compute service without AI models, mak
 - Simple mathematical operations (addition)
 - Payload processing: `{"prompt": {"a":1,"b":2}}` → `{"result": 3}`
 
- The first test passed , I can remove the AI model and run Agentcore as compute processing ... 
+### Step 2: AgentCore with SQS Integration
+
+**Folder:** `2_Run_AgentCore_send_message_to_sqs`
+
+This experiment demonstrates AgentCore integrating with Amazon SQS, replicating common Lambda + SQS patterns.
+
+**Features:**
+- Mathematical operations with SQS output
+- Asynchronous message processing
+- Error handling for SQS failures
+- Event-driven architecture patterns
+
+The first test passed! I can remove the AI model and run AgentCore as compute processing... ✅
 
 ![alt text](images/image-1.png)
 
+### Step 2: Send a Message to SQS
+
+Now things got interesting. I wanted to test if AgentCore could handle one of the most common Lambda patterns: processing data and sending results to SQS for asynchronous processing.
+
+The implementation was straightforward - I extended the mathematical operations from Step 1 to also send the results to an SQS queue. But here's where I learned something important about AgentCore vs Lambda:
+
+**The Challenge:** Environment variables and IAM permissions work differently than Lambda. While Lambda automatically inherits the execution role permissions, AgentCore required explicit IAM policy creation and attachment.
+
+**The Result:** AgentCore can absolutely replicate Lambda + SQS patterns. The payload `{"prompt": {"a":5,"b":3}}` returns `{"result": 8, "message_sent": true, "message_id": "..."}` and the structured message appears in the SQS queue.
+
+The second test passed!, I can send a message to SQS! ✅
+
+![alt text](images/image-2.png)
 ## Getting Started
 
 1. Install AgentCore CLI:
