@@ -23,6 +23,8 @@ Amazon Bedrock AgentCore is an AWS service that provides the foundation for buil
 
 ### Step 0: Run AWS Bedrock AgentCore with AI Model
 
+![alt text](images/arch-1.png)
+
 **Folder:** `0_Run_default_Agentcore`
 
 This folder contains a basic implementation of AgentCore with Titan model. I deploy a simple AgentCore and test the deployment process.
@@ -37,6 +39,8 @@ The deploy was ok and I can run the Agentcore with Amazon Titan Model ✅
 ![alt text](images/image.png)
 
 ### Step 1: Run AgentCore without AI Model
+
+![alt text](images/arch-2.png)
 
 **Folder:** `1_Run_AgentCore_without_AI_model`
 
@@ -53,6 +57,8 @@ The first test passed! I can remove the AI model and run AgentCore as compute pr
 
 ### Step 2: Send a Message to SQS
 
+![alt text](images/arch-3.png)
+
 Now things got interesting. I wanted to test if AgentCore could handle one of the most common Lambda patterns: processing data and sending results to SQS for asynchronous processing.
 
 The implementation was straightforward - I extended the mathematical operations from Step 1 to also send the results to an SQS queue. But here's where I learned something important about AgentCore vs Lambda:
@@ -66,6 +72,8 @@ The second test passed!, I can send a message to SQS! ✅
 ![alt text](images/image-2.png)
 
 ### Step 3: Save JSON to S3 from AgentCore
+
+![alt text](images/arch-4.png)
 
 After proving AgentCore could handle SQS integration, I wanted to test another common Lambda pattern: storing structured data in S3 for analytics and long-term persistence.
 
@@ -93,6 +101,8 @@ The file in the bucket:
 ![alt text](images/image-3-1.png)
 
 ### Step 4: Store Data in DynamoDB from AgentCore
+
+![alt text](images/arch-5.png)
 
 After successfully implementing file storage with S3, I wanted to complete the serverless stack by testing AgentCore with AWS DynamoDB.
 
