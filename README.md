@@ -4,7 +4,7 @@ An investigation of how AgentCore works and whether it could become the new Lamb
 
 ## Context
 
-The last [AWS Community Day Spain 2025 Zaragoza](https://awscommunity.es/) was on Saturday, November 15, 2025. The keynote was given by [Álvaro Hernández Tortosa](https://www.linkedin.com/in/ahachete/). The title of the talk was "Now Go Unbuild", and it introduced a set of five challenges or out-of-the-box ideas about AWS services. One of these services was AgentCore, and the challenge was: "Is AgentCore the new Lambda?"
+The last [AWS Community Day Spain 2025 Zaragoza](https://awscommunity.es/) was on Saturday, November 15, 2025. The keynote was given by [Álvaro Hernández Tortosa](https://www.linkedin.com/in/ahachete/). The title of the talk was *"Now Go Unbuild"*, and it introduced a set of five challenges or out-of-the-box ideas about AWS services. One of these services was AgentCore, and the challenge was: "Is AgentCore the new Lambda?"
 
 ## Hands On
 
@@ -47,18 +47,6 @@ This experiment tests AgentCore as a pure compute service without AI models, mak
 - Simple mathematical operations (addition)
 - Payload processing: `{"prompt": {"a":1,"b":2}}` → `{"result": 3}`
 
-### Step 2: AgentCore with SQS Integration
-
-**Folder:** `2_Run_AgentCore_send_message_to_sqs`
-
-This experiment demonstrates AgentCore integrating with Amazon SQS, replicating common Lambda + SQS patterns.
-
-**Features:**
-- Mathematical operations with SQS output
-- Asynchronous message processing
-- Error handling for SQS failures
-- Event-driven architecture patterns
-
 The first test passed! I can remove the AI model and run AgentCore as compute processing... ✅
 
 ![alt text](images/image-1.png)
@@ -76,6 +64,36 @@ The implementation was straightforward - I extended the mathematical operations 
 The second test passed!, I can send a message to SQS! ✅
 
 ![alt text](images/image-2.png)
+
+### Step 3: Save JSON to S3 from AgentCore
+
+After proving AgentCore could handle SQS integration, I wanted to test another common Lambda pattern: storing structured data in S3 for analytics and long-term persistence.
+
+**The Implementation:** I built on the mathematical operations but this time stored the results directly in S3 with a well-structured JSON format and date-based partitioning.
+
+**The Challenge:** Similar to Step 2, I needed to configure S3 permissions explicitly. AgentCore required its own IAM policy for S3 `PutObject` operations.
+
+**The Process:**
+1. ✅ Created S3 bucket: `agentcore-results-is-agentcore-new-lambda`
+2. ✅ Implemented S3 client integration with date partitioning
+3. ✅ Added environment variable `S3_BUCKET_NAME` to Dockerfile
+4. ✅ Created and attached IAM policy for S3 permissions
+5. 🎉 **Success!** AgentCore now stores structured JSON data in S3
+
+**The Result:** AgentCore successfully stores calculation results in S3. The payload `{"prompt": {"a":1,"b":2}}` returns `{"result": 3, "s3_stored": true, "s3_key": "agentcore-results/2025/11/18/uuid.json", "request_id": "uuid"}` and creates a properly formatted JSON file in S3 with date partitioning.
+
+**Key Insight:** AgentCore can handle data persistence patterns just like Lambda, but with the added benefit of container-based deployment giving you more control over the runtime environment and dependencies.
+
+The third test passed! I can save JSON to S3 from AgentCore! ✅
+
+The invoke to Agentcore:
+
+![alt text](images/image-3.png)
+
+The file in the bucket:
+
+![alt text](images/image-3-1.png)
+
 ## Getting Started
 
 1. Install AgentCore CLI:
@@ -98,3 +116,5 @@ The second test passed!, I can send a message to SQS! ✅
 ## References
 
 - [AWS Bedrock AgentCore Developer Guide](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-get-started-toolkit.html)
+- [Amazon Bedrock AgentCore](https://aws.amazon.com/es/bedrock/agentcore/)
+- [How to Deploy an AI Agent with Amazon Bedrock AgentCore](https://www.freecodecamp.org/news/deploy-an-ai-agent-with-amazon-bedrock/) 

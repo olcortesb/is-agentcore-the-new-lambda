@@ -1,6 +1,6 @@
 # Step 2: AgentCore with SQS Integration
 
-This experiment demonstrates AgentCore as a serverless compute service that sends results to Amazon SQS, replicating a common Lambda + SQS pattern.
+This experiment intends to demonstrate AgentCore as a serverless compute service that sends results to Amazon SQS, replicating a common Lambda + SQS pattern.
 
 ## Overview
 
