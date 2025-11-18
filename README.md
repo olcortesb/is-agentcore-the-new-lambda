@@ -75,7 +75,7 @@ The second test passed!, I can send a message to SQS! ✅
 ### Step 3: Save JSON to S3 from AgentCore
 
 ![alt text](images/arch-3.png)
-![alt text](image.png)
+
 
 After proving AgentCore could handle SQS integration, I wanted to test another common Lambda pattern: storing structured data in S3 for analytics and long-term persistence.
 
