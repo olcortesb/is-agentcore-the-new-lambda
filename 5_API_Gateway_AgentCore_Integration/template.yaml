@@ -1,0 +1,71 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: API Gateway integration with AgentCore via Lambda proxy
+
+Parameters:
+  AgentCoreAgentId:
+    Type: String
+    Description: The AgentCore Agent ID to invoke
+    Default: "agentcore_to_dynamodb-XXXXXXXXXX"
+
+Globals:
+  Function:
+    Timeout: 30
+    Runtime: python3.10
+
+Resources:
+  # Lambda function that proxies requests to AgentCore
+  AgentCoreProxyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: .
+      Handler: lambda_proxy.lambda_handler
+      Environment:
+        Variables:
+          AGENTCORE_AGENT_ID: !Ref AgentCoreAgentId
+      Policies:
+        - Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Action:
+                - bedrock-agentcore:InvokeAgentRuntime
+              Resource: 
+                - !Sub 'arn:aws:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:runtime/${AgentCoreAgentId}'
+                - !Sub 'arn:aws:bedrock-agentcore:${AWS::Region}:${AWS::AccountId}:runtime/${AgentCoreAgentId}/*'
+      Events:
+        CalculateApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AgentCoreApi
+            Path: /calculate
+            Method: post
+        OptionsApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref AgentCoreApi
+            Path: /calculate
+            Method: options
+
+  # API Gateway
+  AgentCoreApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: prod
+      Cors:
+        AllowMethods: "'POST,OPTIONS'"
+        AllowHeaders: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
+        AllowOrigin: "'*'"
+
+
+
+
+
+
+Outputs:
+  ApiGatewayUrl:
+    Description: "API Gateway endpoint URL"
+    Value: !Sub "https://${AgentCoreApi}.execute-api.${AWS::Region}.amazonaws.com/prod/calculate"
+  
+  AgentCoreProxyFunctionArn:
+    Description: "Lambda Proxy Function ARN"
+    Value: !GetAtt AgentCoreProxyFunction.Arn

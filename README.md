@@ -132,8 +132,6 @@ The DynamoDB with the operation sum stored
 
 ![alt text](images/image-4-1.png)
 
-
-
 ## 4.1 Long-Running Process Testing
 
 ### Timeout Behavior with Extended Delays
@@ -171,17 +169,49 @@ For production use cases with long-running processes, you would need to:
 import boto3
 
 client = boto3.client('bedrock-agentcore')
-response = client.invoke_agent(
-    agentId='your-agent-id',
-    sessionId='session-id',
-    inputText='{"prompt": {"a": 1, "b": 2}}',
-    # For async processing
+response = client.invoke_agent_runtime(
+    agentRuntimeArn='arn:aws:bedrock-agentcore:region:account:runtime/agent-id',
+    payload=json.dumps({"prompt": {"a": 1, "b": 2}}).encode(),
+    contentType='application/json'
 )
 ```
 
-The prove 4.1 passe but with comment:
+The prove 4.1 passed but with comments:
 
 ![alt text](images/image-4-2.png)
+### Step 5: API Gateway + AgentCore Integration
+
+![alt text](images/arch-5.png)
+
+**Folder:** `5_API_Gateway_AgentCore_Integration`
+
+The final and most ambitious test: creating a complete HTTP API that exposes AgentCore through API Gateway, making it accessible like any REST API.
+
+**Features:**
+- Complete API Gateway setup with Lambda proxy
+- Real AgentCore integration using `bedrock-agentcore:InvokeAgentRuntime`
+- Dynamic AWS account ID detection
+- Streaming response processing
+- Comprehensive error handling and validation
+- CORS support for web applications
+
+**The Challenge:** This was the most complex integration, requiring:
+1. Correct boto3 version (>= 1.40.75) for AgentCore support
+2. Proper IAM permissions for `bedrock-agentcore:InvokeAgentRuntime`
+3. Correct ARN format: `arn:aws:bedrock-agentcore:region:account:runtime/{agent_id}`
+4. Handling AgentCore's streaming response format
+
+**The Process:**
+1. ✅ Created SAM template with API Gateway and Lambda
+2. ✅ Implemented Lambda proxy with AgentCore SDK integration
+3. ✅ Configured IAM permissions for AgentCore runtime access
+4. ✅ Added streaming response processing
+5. ✅ Implemented dynamic ARN construction
+6. 🎉 **Success!** AgentCore now accessible via HTTP API
+
+**The Result:** AgentCore successfully exposed through API Gateway. HTTP POST requests to the API endpoint invoke the real AgentCore agent and return structured responses, completing the serverless integration stack.
+
+The fifth test passed! AgentCore works as "the new Lambda" with HTTP API access! ✅
 
 ## Getting Started
 

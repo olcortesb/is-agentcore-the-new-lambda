@@ -219,3 +219,6 @@ sqs-policy.json
 s3-policy.json
 dynamodb-policy.json
 3_Run_AgentCore_send_to_s3/s3-policy.json
+5_API_Gateway_AgentCore_Integration/.aws-sam
+5_API_Gateway_AgentCore_Integration/deploy.sh
+5_API_Gateway_AgentCore_Integration/.aws-sam/build.toml
