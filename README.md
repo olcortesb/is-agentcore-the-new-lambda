@@ -105,7 +105,6 @@ The file in the bucket:
 ### Step 4: Store Data in DynamoDB from AgentCore
 
 ![alt text](images/arch-4.png)
-![alt text](image.png)
 
 After successfully implementing file storage with S3, I wanted to complete the serverless stack by testing AgentCore with AWS DynamoDB.
 
