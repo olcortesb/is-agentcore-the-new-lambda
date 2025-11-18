@@ -8,12 +8,20 @@ This implementation extends the mathematical operations by adding DynamoDB integ
 
 ## Files
 
-- `my_agent.py` - Agent implementation with DynamoDB integration
+- `my_agent.py` - Agent implementation with DynamoDB integration and configurable delay
 - `requirements.txt` - Python dependencies
 - `setup.sh` - Environment setup script
 - `dynamodb-policy.example.json` - IAM policy template for DynamoDB permissions
 - `.env.example` - Environment variables template
 - `README.md` - This documentation
+
+## Features
+
+- Mathematical operations (addition)
+- DynamoDB storage with TTL
+- Configurable delay before database write
+- Structured data with unique IDs
+- Graceful error handling
 
 ## Prerequisites
 
@@ -47,6 +55,7 @@ aws dynamodb create-table \
 ```bash
 # Copy the example file and edit with your values
 cp .env.example .env
+# Edit .env file to set DELAY_SECONDS (optional delay before DynamoDB write)
 ```
 
 ### 4. Setup IAM Permissions
@@ -194,6 +203,53 @@ aws dynamodb query \
 - **Indexes:** Consider GSI for timestamp-based queries
 - **Batch Operations:** Use batch writes for high-volume scenarios
 
+## 4.1 Long-Running Process Testing
+
+### Timeout Behavior with Extended Delays
+
+This implementation includes a configurable `DELAY_SECONDS` environment variable that allows testing AgentCore's behavior with long-running processes.
+
+**Testing Long Delays:**
+```bash
+# Set delay to simulate long-running process (e.g., 20 minutes)
+DELAY_SECONDS=1200  # 20 minutes
+```
+
+**Expected Behavior:**
+- **Short delays (< 60 seconds):** `agentcore invoke` works normally
+- **Long delays (> 15 minutes):** `agentcore invoke` will likely timeout
+- **AgentCore continues processing:** The agent keeps running in the background even after CLI timeout
+- **DynamoDB write completes:** Data is still stored after the delay, regardless of CLI timeout
+
+**Limitations of Synchronous Invocation:**
+The `agentcore invoke` command appears to have a timeout limit (estimated ~30-60 seconds for CLI, potentially up to 15 minutes for the actual execution). For long-running processes exceeding this limit:
+
+1. **CLI times out** but **agent continues processing**
+2. **Data is still written** to DynamoDB after the delay
+3. **No response received** via CLI due to timeout
+
+**Asynchronous Invocation Alternative:**
+For production use cases with long-running processes, you would need to:
+- Use the **AWS SDK** to invoke AgentCore asynchronously
+- Implement **callback mechanisms** or **status polling**
+- Use **SQS/SNS** for result notifications
+- Monitor via **CloudWatch logs** instead of CLI response
+
+**Example SDK Invocation (Python):**
+```python
+import boto3
+
+client = boto3.client('bedrock-agentcore')
+response = client.invoke_agent(
+    agentId='your-agent-id',
+    sessionId='session-id',
+    inputText='{"prompt": {"a": 1, "b": 2}}',
+    # For async processing
+)
+```
+
+**Key Insight:** This demonstrates a fundamental difference between AgentCore and Lambda - while both can handle long-running processes, the invocation patterns and timeout behaviors differ, requiring different approaches for long-running workloads.
+
 ## Notes
 
 - Uses ARM64 container architecture
@@ -201,6 +257,7 @@ aws dynamodb query \
 - Returns operation result regardless of storage status
 - Uses TTL for automatic data cleanup (30 days)
 - Generates unique UUIDs for each calculation
+- Supports configurable delays for testing timeout behavior
 
 ## References
 

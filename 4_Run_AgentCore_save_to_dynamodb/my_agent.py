@@ -3,6 +3,7 @@ import boto3
 import json
 import os
 import uuid
+import time
 from datetime import datetime, timezone
 from dotenv import load_dotenv
 
@@ -46,6 +47,13 @@ def invoke(payload):
         table_name = os.environ.get('DYNAMODB_TABLE_NAME')
         if not table_name:
             raise ValueError("DYNAMODB_TABLE_NAME environment variable is required")
+        
+        # Get delay time from environment variable (default to 0 seconds)
+        delay_seconds = int(os.environ.get('DELAY_SECONDS', '0'))
+        
+        # Wait before storing in DynamoDB
+        if delay_seconds > 0:
+            time.sleep(delay_seconds)
         
         table = dynamodb.Table(table_name)
         table.put_item(Item=item)
