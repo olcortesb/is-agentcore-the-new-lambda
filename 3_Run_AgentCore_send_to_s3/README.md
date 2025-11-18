@@ -55,7 +55,10 @@ aws iam create-policy \
   --policy-name AgentCoreS3Policy \
   --policy-document file://s3-policy.json
 
-# Attach policy to AgentCore execution role
+# Find the correct AgentCore execution role name
+cat .bedrock_agentcore.yaml | grep execution_role
+
+# Attach policy to AgentCore execution role (use the role name from above)
 aws iam attach-role-policy \
   --role-name AmazonBedrockAgentCoreSDKRuntime-us-west-2-XXXXXXXXXX \
   --policy-arn arn:aws:iam::YOUR_ACCOUNT_ID:policy/AgentCoreS3Policy

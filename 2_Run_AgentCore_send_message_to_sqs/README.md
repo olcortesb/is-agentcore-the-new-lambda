@@ -60,7 +60,10 @@ aws iam create-policy \
   --policy-name AgentCoreSQSPolicy \
   --policy-document file://sqs-policy.json
 
-# Attach policy to AgentCore execution role
+# Find the correct AgentCore execution role name
+cat .bedrock_agentcore.yaml | grep execution_role
+
+# Attach policy to AgentCore execution role (use the role name from above)
 aws iam attach-role-policy \
   --role-name AmazonBedrockAgentCoreSDKRuntime-us-west-2-XXXXXXXXXX \
   --policy-arn arn:aws:iam::YOUR_ACCOUNT_ID:policy/AgentCoreSQSPolicy

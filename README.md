@@ -82,8 +82,6 @@ After proving AgentCore could handle SQS integration, I wanted to test another c
 
 **The Result:** AgentCore successfully stores calculation results in S3. The payload `{"prompt": {"a":1,"b":2}}` returns `{"result": 3, "s3_stored": true, "s3_key": "agentcore-results/2025/11/18/uuid.json", "request_id": "uuid"}` and creates a properly formatted JSON file in S3 with date partitioning.
 
-**Key Insight:** AgentCore can handle data persistence patterns just like Lambda, but with the added benefit of container-based deployment giving you more control over the runtime environment and dependencies.
-
 The third test passed! I can save JSON to S3 from AgentCore! ✅
 
 The invoke to Agentcore:
@@ -93,6 +91,35 @@ The invoke to Agentcore:
 The file in the bucket:
 
 ![alt text](images/image-3-1.png)
+
+### Step 4: Store Data in DynamoDB from AgentCore
+
+After successfully implementing file storage with S3, I wanted to complete the serverless stack by testing AgentCore with AWS DynamoDB.
+
+**The Implementation:** I extended the mathematical operations to store calculation results in DynamoDB with automatic TTL (Time To Live) for data cleanup and structured attributes for efficient querying.
+
+**The Challenge:** Similar to previous steps, DynamoDB required explicit IAM permissions. Additionally, I needed to configure the table schema and TTL settings for optimal performance.
+
+**The Process:**
+1. ✅ Created DynamoDB table: `agentcore-calculations` with TTL enabled
+2. ✅ Implemented DynamoDB client integration with structured items
+3. ✅ Added environment variable `DYNAMODB_TABLE_NAME` to Dockerfile
+4. ✅ Created and attached IAM policy for DynamoDB permissions
+5. ✅ Configured automatic data cleanup with 30-day TTL
+6. 🎉 **Success!** AgentCore now stores structured data in DynamoDB
+
+**The Result:** AgentCore successfully stores calculation results in DynamoDB. The payload `{"prompt": {"a":7,"b":2}}` returns `{"result": 9, "dynamodb_stored": true, "item_id": "uuid", "timestamp": "2025-11-18T12:48:00.000Z"}` and creates a structured item in DynamoDB with automatic cleanup.
+
+The fourth test passed! I can store structured data in DynamoDB from AgentCore! ✅
+
+The invoke agentcore and response:
+
+![alt text](images/image-4.png)
+
+The DynamoDB with the operation sum stored
+
+![alt text](images/image-4-1.png)
+
 
 ## Getting Started
 

@@ -217,4 +217,5 @@ __marimo__/
 # IAM policy files with account-specific data
 sqs-policy.json
 s3-policy.json
+dynamodb-policy.json
 3_Run_AgentCore_send_to_s3/s3-policy.json
