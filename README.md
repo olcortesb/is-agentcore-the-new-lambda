@@ -237,3 +237,5 @@ The fifth test passed! AgentCore works as "the new Lambda" with HTTP API access!
 - [AWS Bedrock AgentCore Developer Guide](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-get-started-toolkit.html)
 - [Amazon Bedrock AgentCore](https://aws.amazon.com/es/bedrock/agentcore/)
 - [How to Deploy an AI Agent with Amazon Bedrock AgentCore](https://www.freecodecamp.org/news/deploy-an-ai-agent-with-amazon-bedrock/) 
+- [Boto3 documentation V1.40.75](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html#)
+- [Runtime Invoke Agent - Bedrock Agentcore](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-invoke-agent.html)
