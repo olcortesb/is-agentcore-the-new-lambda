@@ -213,6 +213,14 @@ The final and most ambitious test: creating a complete HTTP API that exposes Age
 
 The fifth test passed! AgentCore works as "the new Lambda" with HTTP API access! ✅
 
+The request http:
+
+![alt text](images/image-5-1.png)
+
+The id in dynamoDB stored:
+
+![alt text](images/image-5-2.png)
+
 ## Getting Started
 
 1. Install AgentCore CLI:
@@ -224,6 +232,7 @@ The fifth test passed! AgentCore works as "the new Lambda" with HTTP API access!
 4. Configure AgentCore: `agentcore configure -e my_agent.py`
 5. Deploy using `agentcore deploy`
 6. Test with `agentcore invoke`
+
 
 ## Requirements
 
@@ -239,3 +248,4 @@ The fifth test passed! AgentCore works as "the new Lambda" with HTTP API access!
 - [How to Deploy an AI Agent with Amazon Bedrock AgentCore](https://www.freecodecamp.org/news/deploy-an-ai-agent-with-amazon-bedrock/) 
 - [Boto3 documentation V1.40.75](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html#)
 - [Runtime Invoke Agent - Bedrock Agentcore](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-invoke-agent.html)
+- [Agentcore GetStarted](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/agentcore-get-started-toolkit.html)
