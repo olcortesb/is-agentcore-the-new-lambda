@@ -48,28 +48,7 @@ sam deploy \
 
 Replace `YOUR_AGENT_ID_HERE` with your actual Agent ID from step 2.
 
-### 5. Get API Key
-
-After deployment, get the API key value:
-
-```bash
-# Get API Key ID from CloudFormation output
-API_KEY_ID=$(aws cloudformation describe-stacks \
-    --stack-name agentcore-api-gateway-integration \
-    --query 'Stacks[0].Outputs[?OutputKey==`ApiKeyId`].OutputValue' \
-    --output text)
-
-# Get API Key value
-API_KEY_VALUE=$(aws apigateway get-api-key \
-    --api-key $API_KEY_ID \
-    --include-value \
-    --query 'value' \
-    --output text)
-
-echo "API Key: $API_KEY_VALUE"
-```
-
-### 6. Get API Gateway URL
+### 5. Get API Gateway URL
 
 ```bash
 API_URL=$(aws cloudformation describe-stacks \

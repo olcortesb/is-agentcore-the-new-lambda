@@ -68,7 +68,7 @@ The implementation was straightforward - I extended the mathematical operations 
 
 **The Result:** AgentCore can absolutely replicate Lambda + SQS patterns. The payload `{"prompt": {"a":5,"b":3}}` returns `{"result": 8, "message_sent": true, "message_id": "..."}` and the structured message appears in the SQS queue.
 
-The second test passed!, I can send a message to SQS! ✅
+The second test passed! I can send a message to SQS! ✅
 
 ![alt text](images/image-2.png)
 
@@ -94,7 +94,7 @@ After proving AgentCore could handle SQS integration, I wanted to test another c
 
 The third test passed! I can save JSON to S3 from AgentCore! ✅
 
-The invoke to Agentcore:
+The invoke to AgentCore:
 
 ![alt text](images/image-3.png)
 
@@ -124,7 +124,7 @@ After successfully implementing file storage with S3, I wanted to complete the s
 
 The fourth test passed! I can store structured data in DynamoDB from AgentCore! ✅
 
-The invoke agentcore and response:
+The invoke AgentCore and response:
 
 ![alt text](images/image-4.png)
 
@@ -176,7 +176,7 @@ response = client.invoke_agent_runtime(
 )
 ```
 
-The prove 4.1 passed but with comments:
+The proof 4.1 passed but with comments:
 
 ![alt text](images/image-4-2.png)
 ### Step 5: API Gateway + AgentCore Integration
@@ -220,11 +220,11 @@ curl --location 'https://y7ei22swo7.execute-api.us-west-2.amazonaws.com/prod/cal
 
 The fifth test passed! AgentCore works as "the new Lambda" with HTTP API access! ✅
 
-The request http:
+The HTTP request:
 
 ![alt text](images/image-5-1.png)
 
-The id in dynamoDB stored:
+The ID in DynamoDB stored:
 
 ![alt text](images/image-5-2.png)
 
