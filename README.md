@@ -211,6 +211,13 @@ The final and most ambitious test: creating a complete HTTP API that exposes Age
 
 **The Result:** AgentCore successfully exposed through API Gateway. HTTP POST requests to the API endpoint invoke the real AgentCore agent and return structured responses, completing the serverless integration stack.
 
+**Example API Call:**
+```bash
+curl --location 'https://y7ei22swo7.execute-api.us-west-2.amazonaws.com/prod/calculate' \
+--header 'Content-Type: application/json' \
+--data '{"prompt": {"a": 5, "b": 5}}'
+```
+
 The fifth test passed! AgentCore works as "the new Lambda" with HTTP API access! ✅
 
 The request http:
